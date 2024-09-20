@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morlaco - Financial Tracking</title>
+    <link href="./styles.css" rel="stylesheet">
+    <script src="./index.js" type="module"></script>
+</head>
+<body class="bg-gray-100">
+<div x-data="app()" class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Morlaco Financial Tracking</h1>
+
+    <!-- Login/Register Form -->
+    <div x-show="!isLoggedIn" class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Login or Register</h2>
+        <form @submit.prevent="login">
+            <input type="email" x-model="email" placeholder="Email" class="mb-2 w-full p-2 border rounded">
+            <input type="password" x-model="password" placeholder="Password" class="mb-2 w-full p-2 border rounded">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Login</button>
+        </form>
+        <div x-show="loginError" class="mt-2 text-red-600" x-text="loginError"></div>
+    </div>
+
+    <!-- Dashboard -->
+    <div x-show="isLoggedIn">
+        <h2 class="text-2xl font-semibold mb-4">Dashboard</h2>
+
+        <!-- Projects List -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-2">Projects</h3>
+            <ul>
+                <template x-for="project in projects" :key="project.id">
+                    <li x-text="project.name" class="mb-2"></li>
+                </template>
+            </ul>
+            <button @click="showNewProjectForm = true" class="bg-green-500 text-white px-4 py-2 rounded mt-2">New Project</button>
+        </div>
+
+        <!-- New Project Form -->
+        <div x-show="showNewProjectForm" class="mb-8">
+            <h3 class="text-xl font-semibold mb-2">New Project</h3>
+            <form @submit.prevent="createProject">
+                <input type="text" x-model="newProject.name" placeholder="Project Name" class="mb-2 w-full p-2 border rounded">
+                <select x-model="newProject.type" class="mb-2 w-full p-2 border rounded">
+                    <option value="Personal">Personal</option>
+                    <option value="Business">Business</option>
+                </select>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create Project</button>
+            </form>
+        </div>
+
+        <!-- Accounts List -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-2">Accounts</h3>
+            <ul>
+                <template x-for="account in accounts" :key="account.id">
+                    <li x-text="account.name + ' - ' + account.balance" class="mb-2"></li>
+                </template>
+            </ul>
+            <button @click="showNewAccountForm = true" class="bg-green-500 text-white px-4 py-2 rounded mt-2">New Account</button>
+        </div>
+
+        <!-- New Account Form -->
+        <div x-show="showNewAccountForm" class="mb-8">
+            <h3 class="text-xl font-semibold mb-2">New Account</h3>
+            <form @submit.prevent="createAccount">
+                <input type="text" x-model="newAccount.name" placeholder="Account Name" class="mb-2 w-full p-2 border rounded">
+                <input type="text" x-model="newAccount.currency" placeholder="Currency" class="mb-2 w-full p-2 border rounded">
+                <input type="number" x-model="newAccount.initialBalance" placeholder="Initial Balance" class="mb-2 w-full p-2 border rounded">
+                <input type="text" x-model="newAccount.type" placeholder="Account Type" class="mb-2 w-full p-2 border rounded">
+                <label class="flex items-center mb-2">
+                    <input type="checkbox" x-model="newAccount.isOwn" class="mr-2">
+                    <span>Own Account</span>
+                </label>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create Account</button>
+            </form>
+        </div>
+
+        <!-- Transactions List -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-2">Recent Transactions</h3>
+            <ul>
+                <template x-for="transaction in transactions" :key="transaction.id">
+                    <li x-text="transaction.type + ' - ' + transaction.amount" class="mb-2"></li>
+                </template>
+            </ul>
+            <button @click="showNewTransactionForm = true" class="bg-green-500 text-white px-4 py-2 rounded mt-2">New Transaction</button>
+        </div>
+
+        <!-- New Transaction Form -->
+        <div x-show="showNewTransactionForm" class="mb-8">
+            <h3 class="text-xl font-semibold mb-2">New Transaction</h3>
+            <form @submit.prevent="createTransaction">
+                <select x-model="newTransaction.type" class="mb-2 w-full p-2 border rounded">
+                    <option value="Adjustment">Adjustment</option>
+                    <option value="Expense">Expense</option>
+                    <option value="Income">Income</option>
+                    <option value="LoanGiven">Loan Given</option>
+                    <option value="LoanReceived">Loan Received</option>
+                    <option value="Transfer">Transfer</option>
+                </select>
+                <input type="number" x-model="newTransaction.amount" placeholder="Amount" class="mb-2 w-full p-2 border rounded">
+                <input type="date" x-model="newTransaction.date" class="mb-2 w-full p-2 border rounded">
+                <select x-model="newTransaction.accountId" class="mb-2 w-full p-2 border rounded">
+                    <template x-for="account in accounts" :key="account.id">
+                        <option :value="account.id" x-text="account.name"></option>
+                    </template>
+                </select>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create Transaction</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "morlaco",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "seed-users": "node seedUsers.js"
+  },
+  "author": "Gonzalo Bellver",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  }
+}
